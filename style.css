@@ -1,0 +1,175 @@
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+/* Estilos da página de login */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+
+.login-container input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #45a049;
+}
+
+.login-container #register {
+    background-color: #008CBA;
+    margin-top: 10px;
+}
+
+.login-container #register:hover {
+    background-color: #007B9E;
+}
+
+.login-container #message {
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Estilos da dashboard */
+#logout {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#logout:hover {
+    background-color: #ff1a1a;
+}
+
+/* Layout flexível para as seções */
+.dashboard-layout {
+    display: flex;
+    gap: 20px; /* Espaço entre as seções */
+    margin-top: 20px;
+}
+
+/* Estilo da seção do formulário */
+.treinos-form {
+    flex: 1; /* Ocupa 50% do espaço */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo da seção da tabela de contagem */
+.treinos-contador {
+    flex: 1; /* Ocupa 50% do espaço */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo do formulário */
+#treino-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#treino-form input, #treino-form button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#treino-form button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+}
+
+#treino-form button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo da lista de treinos */
+#tabela-treinos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#tabela-treinos th, #tabela-treinos td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#tabela-treinos th {
+    background-color: #f4f4f4;
+}
+
+#tabela-treinos tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+#tabela-treinos button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#tabela-treinos button.editar {
+    background-color: #008CBA;
+    color: white;
+}
+
+#tabela-treinos button.excluir {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+#tabela-treinos button:hover {
+    opacity: 0.8;
+}

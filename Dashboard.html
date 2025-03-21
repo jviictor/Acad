@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+    <script type="module" src="dashboard.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Meus Treinos</h2>
+        <button id="logout">Sair</button>
+
+        <!-- Contêiner flexível para as seções -->
+        <div class="dashboard-layout">
+            <!-- Seção do formulário de treinos -->
+            <div class="treinos-form">
+                <form id="treino-form">
+                    <input type="date" id="data" required>
+                    <input type="text" id="descricao" placeholder="Descrição do treino" required>
+                    <button type="submit">Adicionar Treino</button>
+                </form>
+            </div>
+
+            <!-- Seção da tabela de contagem de treinos -->
+            <div class="treinos-contador">
+                <h3>Total de Treinos: <span id="contador">0</span></h3>
+                <table id="tabela-treinos">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Os treinos serão inseridos aqui dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
