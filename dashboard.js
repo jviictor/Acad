@@ -31,7 +31,7 @@ function formatarData(dataISO) {
 // Verificar se o usuário está logado
 auth.onAuthStateChanged((user) => {
     if (!user) {
-        window.location.href = "login.html"; // Redireciona para login se não estiver autenticado
+        window.location.href = "index.html"; // Redireciona para index se não estiver autenticado
     } else {
         carregarTreinos(user.uid); // Carrega os treinos do usuário logado
     }
@@ -40,7 +40,7 @@ auth.onAuthStateChanged((user) => {
 // Logout
 document.getElementById("logout").addEventListener("click", () => {
     signOut(auth).then(() => {
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     });
 });
 
