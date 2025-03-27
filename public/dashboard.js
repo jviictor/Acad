@@ -19,11 +19,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Função para formatar a data no padrão brasileiro (dd/mm/aaaa)
-function formatarData(dataISO) {
-    const data = new Date(dataISO);
-    const dia = String(data.getDate()).padStart(2, '0'); // Adiciona zero à esquerda se necessário
-    const mes = String(data.getMonth() + 1).padStart(2, '0'); // Meses começam do zero
+// Função para formatar a data no padrão brasileiro (dd/mm/aaaa) - CORRIGIDA
+function formatarData(dataString) {
+    // Se a data já está no formato YYYY-MM-DD (do input type="date")
+    if (typeof dataString === 'string' && dataString.includes('-')) {
+        const [ano, mes, dia] = dataString.split('-');
+        return `${dia}/${mes}/${ano}`;
+    }
+    
+    // Se for um timestamp do Firebase ou objeto Date
+    const data = new Date(dataString);
+    // Ajuste para o fuso horário local
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
     const ano = data.getFullYear();
     return `${dia}/${mes}/${ano}`;
 }
@@ -44,34 +52,35 @@ document.getElementById("logout").addEventListener("click", () => {
     });
 });
 
-// Adicionar treino
+// Adicionar treino - CORRIGIDO
 document.getElementById("treino-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const user = auth.currentUser;
     if (!user) return;
 
-    const data = document.getElementById("data").value;
+    const dataInput = document.getElementById("data").value;
     const descricao = document.getElementById("descricao").value;
 
-    if (data.trim() === "" || descricao.trim() === "") return;
+    if (!dataInput || descricao.trim() === "") return;
 
     try {
+        // Armazena a data no formato YYYY-MM-DD para consistência
         await addDoc(collection(db, "treinos"), {
             userId: user.uid,
-            data,
+            data: dataInput,
             descricao,
             timestamp: new Date()
         });
 
         document.getElementById("treino-form").reset();
-        carregarTreinos(user.uid); // Recarrega a lista de treinos após adicionar um novo
+        carregarTreinos(user.uid);
     } catch (error) {
         console.error("Erro ao adicionar treino: ", error);
     }
 });
 
-// Função para carregar e exibir os treinos
+// Função para carregar e exibir os treinos - CORRIGIDA
 async function carregarTreinos(userId) {
     const tabelaTreinos = document.querySelector("#tabela-treinos tbody");
     const contador = document.getElementById("contador");
@@ -90,7 +99,10 @@ async function carregarTreinos(userId) {
         });
 
         // Ordena os treinos por data (do mais antigo para o mais recente)
-        treinos.sort((a, b) => new Date(a.data) - new Date(b.data));
+        treinos.sort((a, b) => {
+            // Converte as strings YYYY-MM-DD para dates para comparação
+            return new Date(a.data) - new Date(b.data);
+        });
 
         // Atualiza o contador de treinos
         contador.textContent = treinos.length;
@@ -101,7 +113,7 @@ async function carregarTreinos(userId) {
 
             // Coluna de Data (formatada)
             const dataCell = document.createElement("td");
-            dataCell.textContent = formatarData(treino.data); // Formata a data
+            dataCell.textContent = formatarData(treino.data);
             row.appendChild(dataCell);
 
             // Coluna de Descrição
@@ -115,14 +127,14 @@ async function carregarTreinos(userId) {
             // Botão de Editar
             const editarBtn = document.createElement("button");
             editarBtn.textContent = "Editar";
-            editarBtn.classList.add("editar"); // Adiciona classe para estilização
+            editarBtn.classList.add("editar");
             editarBtn.addEventListener("click", () => editarTreino(treino.id, treino));
             acoesCell.appendChild(editarBtn);
 
             // Botão de Excluir
             const excluirBtn = document.createElement("button");
             excluirBtn.textContent = "Excluir";
-            excluirBtn.classList.add("excluir"); // Adiciona classe para estilização
+            excluirBtn.classList.add("excluir");
             excluirBtn.addEventListener("click", () => excluirTreino(treino.id));
             acoesCell.appendChild(excluirBtn);
 
@@ -134,12 +146,17 @@ async function carregarTreinos(userId) {
     }
 }
 
-// Função para editar um treino
+// Função para editar um treino - CORRIGIDA
 async function editarTreino(id, treino) {
-    const novaData = prompt("Editar data:", treino.data);
+    // Mostra a data já formatada para edição
+    const novaDataStr = prompt("Editar data (DD/MM/AAAA):", formatarData(treino.data));
     const novaDescricao = prompt("Editar descrição:", treino.descricao);
 
-    if (novaData && novaDescricao) {
+    if (novaDataStr && novaDescricao) {
+        // Converte de DD/MM/AAAA para YYYY-MM-DD para armazenamento
+        const [dia, mes, ano] = novaDataStr.split('/');
+        const novaData = `${ano}-${mes}-${dia}`;
+        
         try {
             await updateDoc(doc(db, "treinos", id), {
                 data: novaData,
@@ -147,20 +164,21 @@ async function editarTreino(id, treino) {
             });
 
             alert("Treino atualizado com sucesso!");
-            carregarTreinos(auth.currentUser.uid); // Recarrega a lista de treinos
+            carregarTreinos(auth.currentUser.uid);
         } catch (error) {
             console.error("Erro ao editar treino: ", error);
+            alert("Erro ao atualizar treino. Verifique o formato da data (DD/MM/AAAA).");
         }
     }
 }
 
-// Função para excluir um treino
+// Função para excluir um treino (mantida igual)
 async function excluirTreino(id) {
     if (confirm("Tem certeza que deseja excluir este treino?")) {
         try {
             await deleteDoc(doc(db, "treinos", id));
             alert("Treino excluído com sucesso!");
-            carregarTreinos(auth.currentUser.uid); // Recarrega a lista de treinos
+            carregarTreinos(auth.currentUser.uid);
         } catch (error) {
             console.error("Erro ao excluir treino: ", error);
         }
